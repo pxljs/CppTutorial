@@ -7,10 +7,9 @@
 #include "MoveComponent.generated.h"
 
 UDELEGATE(BlueprintAuthorityOnly)
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMoveComponentReachEndPointSignature,bool,IsTopEndPoint);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMoveComponentReachEndPointSignature, bool, IsTopEndpoint);
 
-
-UCLASS( ClassGroup=(NewCppTutorial), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(NewCppTutorial), meta=(BlueprintSpawnableComponent) )
 class NEWCPPTUTORIAL_API UMoveComponent : public USceneComponent
 {
 	GENERATED_BODY()
@@ -18,7 +17,6 @@ class NEWCPPTUTORIAL_API UMoveComponent : public USceneComponent
 public:	
 	// Sets default values for this component's properties
 	UMoveComponent();
-
 
 	UFUNCTION(BlueprintCallable)
 	void EnableMovement(bool ShouldMove);
@@ -28,7 +26,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetMoveDirection(int Direction);
-
 
 protected:
 	// Called when the game starts
@@ -49,7 +46,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	float Speed = 1.0f;
 
-    // Enable the movement of the component
+	// Enable the movement of the component
 	UPROPERTY(EditAnywhere)
 	bool MoveEnable = true;
 
@@ -63,4 +60,5 @@ private:
 	float MaxDistance = 0.0f;
 	float CurDistance = 0.0f;
 	int MoveDirection = 1;
+
 };
