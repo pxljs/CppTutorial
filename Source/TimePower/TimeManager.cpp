@@ -11,26 +11,73 @@ ATimeManager::ATimeManager()
 
 }
 
-float ATimeManager::GetTimeFactor() {
+void ATimeManager::Tick(float DeltaSeconds)
+{
+    Super::Tick(DeltaSeconds);
+    
+	// Store recorded time
+	if (TimeReversalAbilityEnabled)
+    {
+        CurrentRecordedTime = TMathUtil<float>::Min(ReverseTimeMaximum, CurrentRecordedTime + DeltaSeconds * CurrentTimeFactor);
+        if (CurrentRecordedTime <= 0.0f)
+        {
+            EndTimeReverse();
+            CurrentRecordedTime = 0.0f;
+        }
+	}
+}
+
+float ATimeManager::GetTimeFactor()
+{
 	return CurrentTimeFactor;
 }
 
-void ATimeManager::BeginTimeReverse() {
-	CurrentTimeFactor = ReverseTimeFactor;
+bool ATimeManager::GetAbilityAvailible()
+{
+	return TimeReversalAbilityEnabled && CurrentRecordedTime >= ReverseTimeThreshold;
 }
 
-void ATimeManager::EndTimeReverse() {
+float ATimeManager::GetCurrentReversableTime()
+{
+	return CurrentRecordedTime;
+}
+
+void ATimeManager::BeginTimeReverse()
+{
+	if (GetAbilityAvailible())
+	{
+		CurrentTimeFactor = ReverseTimeFactor;
+	}
+}
+
+void ATimeManager::EndTimeReverse()
+{
 	CurrentTimeFactor = NormalTimeFactor;
+}
+
+void ATimeManager::EnableTimeReverseAbility()
+{
+	if (!TimeReversalAbilityEnabled)
+	{
+		TimeReversalAbilityEnabled = true;
+	}
+}
+
+void ATimeManager::DisableTimeReverseAbility()
+{
+	if (TimeReversalAbilityEnabled)
+	{
+		EndTimeReverse();
+		CurrentRecordedTime = 0.0f;
+		TimeReversalAbilityEnabled = false;
+	}
 }
 
 // Called when the game starts or when spawned
 void ATimeManager::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	// Apply normal time
 	CurrentTimeFactor = NormalTimeFactor;
-	
 }
-
-
